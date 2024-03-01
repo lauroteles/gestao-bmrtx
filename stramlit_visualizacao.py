@@ -36,13 +36,14 @@ st.header('Calculo e armazenamento dos dados da Taxa de Gestão')
 api_key = st.secrets.get('api_key')
 
 def registrar_dados_no_Mysql(dados):
-    engine = create_engine(api_key)
+    engine = create_engine('mysql+pymysql://admin:Bluemetrix2024@bluemetrix-teste.cziuya4oaa6t.us-east-2.rds.amazonaws.com:3306/Bluemetrix')
     dados.to_sql('taxa_admin',con=engine, if_exists='append',index=False)
+
+
 
 dia_e_hora = datetime.datetime.now().strftime("%Y-%m-%d")
 
 calculadora = CalculandoTaxadeGestao()
-
 
 
 guias = 'BTG','Guide','Ágora','Consulta'
@@ -165,7 +166,7 @@ elif radio == 'Ágora':
 if radio == 'Consulta':
 
     def consultar_data_base(data=None,conta=None):
-        engine = create_engine(api_key)
+        engine = create_engine('mysql+pymysql://admin:Bluemetrix2024@bluemetrix-teste.cziuya4oaa6t.us-east-2.rds.amazonaws.com:3306/Bluemetrix')
 
         consultar_sql = " SELECT * FROM taxa_admin"
 
@@ -178,7 +179,7 @@ if radio == 'Consulta':
         return resultados
 
     def consultar_banco_de_dados_por_periodo(data_inicio, data_fim):
-        engine = create_engine(api_key)
+        engine = create_engine('mysql+pymysql://admin:Bluemetrix2024@bluemetrix-teste.cziuya4oaa6t.us-east-2.rds.amazonaws.com:3306/Bluemetrix')
         query = f"SELECT * FROM taxa_admin WHERE data BETWEEN '{data_inicio}' AND '{data_fim}'"
         arquivo_consulta = pd.read_sql(query, engine)
         return arquivo_consulta
@@ -195,7 +196,7 @@ if radio == 'Consulta':
         st.success(f"Valor total das taxas para o período e de:  R$ {arquivo_consulta_filtro['Valor_de_cobrança'].sum():,.2f}")
 
     def consultar_banco_de_dados_completo():
-        engine = create_engine(api_key)
+        engine = create_engine('mysql+pymysql://admin:Bluemetrix2024@bluemetrix-teste.cziuya4oaa6t.us-east-2.rds.amazonaws.com:3306/Bluemetrix')
         arquivo_consulta = pd.read_sql(" SELECT * FROM taxa_admin",engine)
         return arquivo_consulta
 
